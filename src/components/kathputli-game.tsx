@@ -192,11 +192,23 @@ export function SutradharGame() {
     }
   };
   
+  const getCommandDisplayName = (command: Command) => {
+    if (command.name === 'Wave') {
+      return command.actionString.includes('Left') ? 'Wave (Left)' : 'Wave (Right)';
+    }
+    if (command.name === 'Tap Foot') {
+      return command.actionString.includes('Left') ? 'Tap Foot (Left)' : 'Tap Foot (Right)';
+    }
+    return command.name;
+  };
+  
   const currentCommand = show.script[currentMove];
   const dialogContent = getDialogContent();
   const isBowing = activeAnimation?.name === 'Bow';
-  const isWaving = activeAnimation?.name === 'Wave';
-  const isTappingFoot = activeAnimation?.name === 'Tap Foot';
+  const isWaving = activeAnimation?.actionString === 'Right Hand' && activeAnimation.name === 'Wave';
+  const isWavingLeft = activeAnimation?.actionString === 'Left Hand' && activeAnimation.name === 'Wave';
+  const isTappingFoot = activeAnimation?.actionString === 'Right Foot' && activeAnimation.name === 'Tap Foot';
+  const isTappingFootLeft = activeAnimation?.actionString === 'Left Foot' && activeAnimation.name === 'Tap Foot';
 
   return (
     <div className="w-full max-w-2xl mx-auto font-body">
@@ -204,13 +216,13 @@ export function SutradharGame() {
         <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary">The Sutradhar's Show</h1>
         <div className="text-muted-foreground mt-3 text-base sm:text-lg flex justify-center items-center gap-2 flex-wrap">
           {show.script.map((command, index) => (
-             <React.Fragment key={command.id}>
+             <React.Fragment key={command.id + index}>
               <span className={cn(
                 "px-2 py-1 rounded",
                 {'font-bold text-foreground bg-primary/20': index === currentMove},
                 {'opacity-60': index < currentMove},
               )}>
-                {command.name}
+                {getCommandDisplayName(command)}
               </span>
               {index < show.script.length - 1 && <ChevronsRight className="size-5 opacity-50 shrink-0" />}
             </React.Fragment>
@@ -272,8 +284,10 @@ export function SutradharGame() {
                 </g>
 
                 {/* Left Arm */}
-                <line x1="80" y1="110" x2="40" y2="130" stroke="#8B4513" strokeWidth="5" />
-                <circle ref={el => anchorRefs.current.set('Left Hand', el)} cx="40" cy="130" r="8" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
+                 <g transform-origin="80 110" className={cn('transition-transform duration-500', {'origin-top-right rotate-[45deg]': isWavingLeft})}>
+                  <line x1="80" y1="110" x2="40" y2="130" stroke="#8B4513" strokeWidth="5" />
+                  <circle ref={el => anchorRefs.current.set('Left Hand', el)} cx="40" cy="130" r="8" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
+                </g>
 
                 {/* Right Arm (for waving) */}
                 <g transform-origin="120 110" className={cn('transition-transform duration-500', {'origin-top-left rotate-[-45deg]': isWaving})}>
@@ -282,8 +296,10 @@ export function SutradharGame() {
                 </g>
                 
                 {/* Left Leg */}
-                <line x1="90" y1="180" x2="70" y2="220" stroke="#8B4513" strokeWidth="5" />
-                <circle ref={el => anchorRefs.current.set('Left Foot', el)} cx="70" cy="220" r="10" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
+                <g transform-origin="90 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFootLeft})}>
+                  <line x1="90" y1="180" x2="70" y2="220" stroke="#8B4513" strokeWidth="5" />
+                  <circle ref={el => anchorRefs.current.set('Left Foot', el)} cx="70" cy="220" r="10" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
+                </g>
 
                 {/* Right Leg (for tapping) */}
                  <g transform-origin="110 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFoot})}>

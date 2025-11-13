@@ -37,5 +37,14 @@ export const SHOW_SCRIPTS: Show[] = [
         { id: 'cmd1', name: 'Bow', actionString: 'Head' },
         { id: 'cmd5', name: 'Bow', actionString: 'Head' },
     ],
+  },
+  {
+    id: 'show4',
+    name: 'The Welcome',
+    script: [
+        { id: 'cmd6', name: 'Wave', actionString: 'Left Hand' },
+        { id: 'cmd7', name: 'Wave', actionString: 'Right Hand' },
+        { id: 'cmd8', name: 'Bow', actionString: 'Head' },
+    ],
   }
 ];
