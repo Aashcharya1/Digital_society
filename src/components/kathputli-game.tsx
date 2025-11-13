@@ -298,7 +298,7 @@ export function SutradharGame() {
   return (
     <div className="w-full max-w-2xl mx-auto font-body">
       <header className="text-center mb-4">
-        <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary">The Sutradhar's Show</h1>
+        <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary" style={{ textShadow: '0 0 5px white, 0 0 10px white, 0 0 15px white' }}>The Sutradhar's Show</h1>
         <div className="text-muted-foreground mt-3 text-base sm:text-lg flex justify-center items-center gap-2 flex-wrap">
           {show.script.map((command, index) => (
              <React.Fragment key={command.id + index}>
@@ -306,7 +306,7 @@ export function SutradharGame() {
                 "px-2 py-1 rounded",
                 {'font-bold text-foreground bg-primary/20': index === currentMove},
                 {'opacity-60': index < currentMove},
-              )}>
+              )} style={{ textShadow: '0 0 2px white' }}>
                 {getCommandDisplayName(command)}
               </span>
               {index < show.script.length - 1 && <ChevronsRight className="size-5 opacity-50 shrink-0" />}
@@ -365,30 +365,30 @@ export function SutradharGame() {
                 <path d="M 80 180 Q 100 200 120 180 L 120 100 Q 100 90 80 100 Z" fill="#D2B48C" stroke="#A0522D" strokeWidth="2" />
                 
                 {/* Head (for bowing) */}
-                <g transform-origin="100 100" className={cn('transition-transform duration-500', {'rotate-[20deg]': isBowing})}>
+                <g transformOrigin="100 100" className={cn('transition-transform duration-500', {'rotate-[20deg]': isBowing})}>
                   <circle ref={el => anchorRefs.current.set('Head', el)} cx="100" cy="80" r="20" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
                 </g>
 
                 {/* Left Arm */}
-                 <g transform-origin="80 110" className={cn('transition-transform duration-500', {'origin-top-right rotate-[45deg]': isWavingLeft})}>
+                 <g transformOrigin="80 110" className={cn('transition-transform duration-500', {'origin-top-right rotate-[45deg]': isWavingLeft})}>
                   <line x1="80" y1="110" x2="40" y2="130" stroke="#8B4513" strokeWidth="5" />
                   <circle ref={el => anchorRefs.current.set('Left Hand', el)} cx="40" cy="130" r="8" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
                 </g>
 
                 {/* Right Arm (for waving) */}
-                <g transform-origin="120 110" className={cn('transition-transform duration-500', {'origin-top-left rotate-[-45deg]': isWaving})}>
+                <g transformOrigin="120 110" className={cn('transition-transform duration-500', {'origin-top-left rotate-[-45deg]': isWaving})}>
                   <line x1="120" y1="110" x2="160" y2="130" stroke="#8B4513" strokeWidth="5" />
                   <circle ref={el => anchorRefs.current.set('Right Hand', el)} cx="160" cy="130" r="8" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
                 </g>
                 
                 {/* Left Leg */}
-                <g transform-origin="90 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFootLeft})}>
+                <g transformOrigin="90 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFootLeft})}>
                   <line x1="90" y1="180" x2="70" y2="220" stroke="#8B4513" strokeWidth="5" />
                   <circle ref={el => anchorRefs.current.set('Left Foot', el)} cx="70" cy="220" r="10" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
                 </g>
 
                 {/* Right Leg (for tapping) */}
-                 <g transform-origin="110 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFoot})}>
+                 <g transformOrigin="110 180" className={cn('transition-transform duration-300', {'translate-y-[-10px]': isTappingFoot})}>
                   <line x1="110" y1="180" x2="130" y2="220" stroke="#8B4513" strokeWidth="5" />
                   <circle ref={el => anchorRefs.current.set('Right Foot', el)} cx="130" cy="220" r="10" fill="#F5DEB3" stroke="#A0522D" strokeWidth="2" />
                 </g>
@@ -436,3 +436,5 @@ export function SutradharGame() {
     </div>
   );
 }
+
+    
