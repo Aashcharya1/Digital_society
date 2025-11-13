@@ -68,9 +68,6 @@ const HaveliBackground = () => {
             {/* Bottom elements */}
             <div className="absolute bottom-0 left-0 right-0 h-[12%] flex items-end">
                 <div className="w-full h-full bg-marble-floor" />
-                {/* Cushions */}
-                <div className="absolute -left-12 bottom-0 w-56 h-28 bg-deep-red rounded-t-full transform -skew-x-12 opacity-90 shadow-lg" />
-                <div className="absolute -right-12 bottom-0 w-56 h-28 bg-emerald-green rounded-t-full transform skew-x-12 opacity-90 shadow-lg" />
                 {/* Diya Lamp */}
                 <div className="absolute right-6 bottom-4 text-amber-400 drop-shadow-[0_0_8px_rgba(255,191,0,0.8)]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
@@ -96,8 +93,6 @@ const HaveliBackground = () => {
                     background-size: 30px 30px;
                     background-position: 0 0, 15px 15px;
                 }
-                .bg-deep-red { background-color: #8B0000; }
-                .bg-emerald-green { background-color: #00693E; }
             `}</style>
         </div>
     )
