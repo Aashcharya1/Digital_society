@@ -82,13 +82,11 @@ const HaveliBackground = () => {
 
              <style jsx>{`
                 .bg-rajasthani-wall {
-                    background-color: #d3a17d; /* Sandstone */
-                    background-image: linear-gradient(315deg, #c38e6d 25%, transparent 25%), 
-                                      linear-gradient(45deg, #c38e6d 25%, transparent 25%),
-                                      linear-gradient(315deg, transparent 75%, #c38e6d 75%),
-                                      linear-gradient(45deg, transparent 75%, #c38e6d 75%);
-                    background-size: 50px 50px;
-                    background-position: 0 0, 25px 25px, 25px 25px, 0 0;
+                    background-color: #FDF5E6; /* Old Lace - a soft, aged plaster color */
+                    background-image:
+                        /* Small floral block print */
+                        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd' fill='%23d3a17d' fill-opacity='0.4'%3E%3Cpath d='M20 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-8 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm16 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM20 28c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'/%3E%3Cpath d='M20 0a20 20 0 100 40 20 20 0 000-40zM3.5 20a16.5 16.5 0 1133 0 16.5 16.5 0 01-33 0z'/%3E%3C/g%3E%3C/svg%3E");
+                    background-size: 20px 20px;
                 }
                 .bg-marble-floor {
                     background-color: #f0e6d2; /* Light cream marble */
