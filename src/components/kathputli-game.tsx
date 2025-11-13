@@ -203,15 +203,13 @@ export function SutradharGame() {
   
     // Rule: A string is tangled if another string with a higher priority 
     // is located in a slot to its right.
-    for (const otherString of strings) {
-      if (otherString.id === pulledString.id) continue;
-
-      if (otherString.slotIndex > pulledString.slotIndex) {
-        if (otherString.priority > pulledString.priority) {
-          setGameStatus('lost-tangled');
-          return;
-        }
-      }
+    const pulledStringSlotIndex = pulledString.slotIndex;
+    const stringsToTheRight = strings.filter(s => s.slotIndex > pulledStringSlotIndex);
+    const isTangled = stringsToTheRight.some(s => s.priority > pulledString.priority);
+  
+    if (isTangled) {
+      setGameStatus('lost-tangled');
+      return;
     }
     
     // Success
@@ -445,3 +443,4 @@ export function SutradharGame() {
     
 
     
+
