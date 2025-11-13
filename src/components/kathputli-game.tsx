@@ -190,30 +190,33 @@ export function SutradharGame() {
   
   const handlePull = (pulledStringId: PuppetPart) => {
     if (gameStatus !== 'playing') return;
-
-    const actionStringId = show.script[currentMove].actionString;
-    if (pulledStringId !== actionStringId) {
+  
+    const command = show.script[currentMove];
+    if (pulledStringId !== command.actionString) {
       setGameStatus('lost-wrong');
       return;
     }
-
+  
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
-
-    const pulledStringIndex = strings.findIndex(s => s.id === pulledStringId);
-
-    for (let i = pulledStringIndex + 1; i < strings.length; i++) {
-        if (strings[i].priority > pulledString.priority) {
-            setGameStatus('lost-tangled');
-            return;
+  
+    const pulledStringSlotIndex = pulledString.slotIndex;
+  
+    // Rule: A string is tangled if another string with a higher priority 
+    // is located in a slot to its right.
+    for (const otherString of strings) {
+      if (otherString.slotIndex > pulledStringSlotIndex) {
+        if (otherString.priority > pulledString.priority) {
+          setGameStatus('lost-tangled');
+          return;
         }
+      }
     }
     
     // Success
-    const command = show.script[currentMove];
     setActiveAnimation(command);
     setTimeout(() => setActiveAnimation(null), 700);
-
+  
     if (currentMove < show.script.length - 1) {
       setCurrentMove(prev => prev + 1);
     } else {
