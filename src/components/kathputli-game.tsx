@@ -194,12 +194,8 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId)!;
     const actionStringId = show.script[currentMove].actionString;
     
-    const showScriptStringIds = new Set(show.script.map(cmd => cmd.actionString));
-
-    const relevantStrings = strings.filter(s => showScriptStringIds.has(s.id));
-    
     const pulledStringSlotIndex = pulledString.slotIndex;
-    const higherPriorityBlockers = relevantStrings.filter(s => 
+    const higherPriorityBlockers = strings.filter(s => 
         s.slotIndex > pulledStringSlotIndex && s.priority > pulledString.priority
     );
 
