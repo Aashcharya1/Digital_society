@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
@@ -200,13 +198,17 @@ export function SutradharGame() {
 
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
-    
-    const pulledStringSlotIndex = pulledString.slotIndex;
-    
-    const stringsToTheRight = strings.filter(s => s.slotIndex > pulledStringSlotIndex);
-    
-    const isTangled = stringsToTheRight.some(s => s.priority > pulledString.priority);
-  
+
+    // A string is tangled if any string to its right has a higher priority.
+    const isTangled = strings.some(otherString => {
+        if (otherString.id === pulledString.id) {
+            return false; // Don't compare a string to itself
+        }
+        const isToTheRight = otherString.slotIndex > pulledString.slotIndex;
+        const hasHigherPriority = otherString.priority > pulledString.priority;
+        return isToTheRight && hasHigherPriority;
+    });
+
     if (isTangled) {
         setGameStatus('lost-tangled');
         return;
@@ -437,9 +439,3 @@ export function SutradharGame() {
     </div>
   );
 }
-
-    
-
-    
-
-    
