@@ -1,3 +1,10 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hawa-mahal-background",
+      "description": "An exterior view of the Hawa Mahal palace in Jaipur, India, to be used as a full-page background.",
+      "imageUrl": "https://images.unsplash.com/photo-1695395550316-8995ae9d35ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxoYXdhJTIwbWFoYWwlMjBwYWxhY2V8ZW58MHx8fHwxNzYzMDA4Mjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hawa mahal palace"
+    }
+  ]
 }
