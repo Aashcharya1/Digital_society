@@ -191,20 +191,19 @@ export function SutradharGame() {
   const handlePull = (pulledStringId: PuppetPart) => {
     if (gameStatus !== 'playing') return;
 
-    const pulledString = strings.find(s => s.id === pulledStringId)!;
     const actionStringId = show.script[currentMove].actionString;
-    
-    const pulledStringSlotIndex = pulledString.slotIndex;
-    const higherPriorityBlockers = strings.filter(s => 
-        s.slotIndex > pulledStringSlotIndex && s.priority > pulledString.priority
-    );
-
     if (pulledStringId !== actionStringId) {
       setGameStatus('lost-wrong');
       return;
     }
 
-    if (higherPriorityBlockers.length > 0) {
+    const pulledString = strings.find(s => s.id === pulledStringId)!;
+    const pulledStringSlotIndex = pulledString.slotIndex;
+
+    const stringsToTheRight = strings.filter(s => s.slotIndex > pulledStringSlotIndex);
+    const isTangled = stringsToTheRight.some(s => s.priority > pulledString.priority);
+
+    if (isTangled) {
       setGameStatus('lost-tangled');
       return;
     }
@@ -435,6 +434,8 @@ export function SutradharGame() {
     </div>
   );
 }
+
+    
 
     
 
