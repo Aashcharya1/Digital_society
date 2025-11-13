@@ -39,6 +39,60 @@ const PuppetIcon = ({ part }: { part: PuppetPart }) => {
   }
 };
 
+const HaveliBackground = () => (
+    <div className="absolute inset-0 overflow-hidden bg-[#D2B48C] z-0">
+      {/* Main Wall Texture */}
+      <div className="absolute inset-0 bg-repeat opacity-10" style={{backgroundImage: `url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%239C92AC" fill-opacity="0.1"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>')`}}></div>
+  
+      {/* Central Arch */}
+      <div className="absolute inset-x-0 top-0 bottom-1/8 flex justify-center">
+        <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
+          <path
+            d="M 50 300 L 50 150 C 50 50, 150 50, 200 100 C 250 50, 350 50, 350 150 L 350 300 Z"
+            className="fill-amber-100/30"
+          />
+           <path
+            d="M 60 300 L 60 150 C 60 60, 150 60, 200 110 C 250 60, 340 60, 340 150 L 340 300 Z"
+            fill="none"
+            stroke="hsl(var(--border))"
+            strokeWidth="1"
+            opacity="0.5"
+          />
+        </svg>
+      </div>
+  
+      {/* Stage Floor */}
+      <div className="absolute bottom-0 left-0 right-0 h-[10%] bg-stone-300" style={{
+          backgroundSize: '20px 20px',
+          backgroundImage: 'linear-gradient(to right, #BDBDBD 1px, transparent 1px), linear-gradient(to bottom, #BDBDBD 1px, transparent 1px)'
+      }}></div>
+  
+       {/* Jharokha on left */}
+      <div className="absolute top-1/4 left-4 h-24 w-12 bg-stone-700/50 rounded-t-lg border border-stone-800/50 p-1 hidden sm:block">
+          <div className="w-full h-full border border-stone-600/50 rounded-t-md grid grid-cols-2 gap-1 p-1">
+              <div className="bg-amber-100/10 rounded-sm"></div>
+              <div className="bg-amber-100/10 rounded-sm"></div>
+              <div className="bg-amber-100/10 rounded-sm col-span-2"></div>
+              <div className="bg-amber-100/10 rounded-sm col-span-2"></div>
+          </div>
+      </div>
+
+       {/* Curtain on right */}
+       <div className="absolute top-0 right-0 h-full w-16 bg-red-800/70 hidden sm:block" style={{clipPath: 'polygon(0 0, 100% 0, 100% 100%, 20% 100%)'}}>
+           <div className="absolute inset-0 opacity-20" style={{backgroundImage: `url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><path d="M40 40c11.046 0 20-8.954 20-20S51.046 0 40 0 20 8.954 20 20s8.954 20 20 20zm0 0c-11.046 0-20 8.954-20 20s8.954 20 20 20 20-8.954 20-20-8.954-20-20-20z" fill-opacity="0.2" fill="%23000000"/></svg>')`}}></div>
+       </div>
+
+      {/* Floor Cushions */}
+      <div className="absolute bottom-1 left-2 w-20 h-10 bg-fuchsia-800 rounded-t-md opacity-80 hidden sm:block"></div>
+      <div className="absolute bottom-1 right-2 w-24 h-12 bg-emerald-700 rounded-t-lg opacity-80 hidden sm:block"></div>
+
+       {/* Diya Lamp */}
+       <div className="absolute bottom-[calc(10%-4px)] right-28 w-6 h-4 bg-amber-600 rounded-full hidden sm:block">
+         <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-2 h-3 bg-amber-400 rounded-full" style={{boxShadow: '0 0 5px 2px #fef08a'}}></div>
+       </div>
+    </div>
+  );
+
 export function SutradharGame() {
   const [strings, setStrings] = useState<StringState[]>([]);
   const [gameStatus, setGameStatus] = useState<GameStatus>('playing');
@@ -58,7 +112,31 @@ export function SutradharGame() {
     setShow(randomShow);
     setCurrentMove(0);
     
-    const initialStrings = shuffleArray(STRINGS).map((s, i) => ({ ...s, slotIndex: i }));
+    let initialStrings = shuffleArray(STRINGS).map((s, i) => ({ ...s, slotIndex: i }));
+
+    // Ensure the game starts in a tangled state for the second move if possible
+    if (randomShow.script.length > 1) {
+      const firstAction = randomShow.script[0];
+      const secondAction = randomShow.script[1];
+      const secondActionString = initialStrings.find(s => s.id === secondAction.actionString)!;
+      const higherPriorityStrings = initialStrings.filter(s => s.priority > secondActionString.priority);
+      
+      const isTangledForSecondMove = higherPriorityStrings.some(s => s.slotIndex > secondActionString.slotIndex);
+      
+      if (!isTangledForSecondMove && higherPriorityStrings.length > 0) {
+          const stringToTangle = higherPriorityStrings[0];
+          const tangleTargetSlotIndex = initialStrings.length - 1;
+
+          if (secondActionString.slotIndex < tangleTargetSlotIndex) {
+              const stringAtTarget = initialStrings.find(s => s.slotIndex === tangleTargetSlotIndex)!;
+              
+              const tangledStringOldIndex = stringToTangle.slotIndex;
+              stringToTangle.slotIndex = tangleTargetSlotIndex;
+              stringAtTarget.slotIndex = tangledStringOldIndex;
+          }
+      }
+    }
+
     setStrings(initialStrings.sort((a, b) => a.slotIndex - b.slotIndex));
     setGameStatus('playing');
     setActiveAnimation(null);
@@ -233,8 +311,9 @@ export function SutradharGame() {
       </header>
       
       <Card className="shadow-lg overflow-hidden">
-        <CardContent ref={gameAreaRef} className="p-2 sm:p-4 relative aspect-[4/3] bg-card">
-          <div className="absolute top-0 left-0 right-0 h-28 sm:h-32 p-2 flex justify-around items-start z-10">
+        <CardContent ref={gameAreaRef} className="p-2 sm:p-4 relative aspect-[4/3] bg-transparent">
+          <HaveliBackground />
+          <div className="absolute top-0 left-0 right-0 h-28 sm:h-32 p-2 flex justify-around items-start z-20">
             {strings.map((s) => (
               <div
                 key={s.id}
@@ -269,7 +348,7 @@ export function SutradharGame() {
             ))}
           </div>
 
-          <div className="absolute inset-0 flex items-end justify-center">
+          <div className="absolute inset-0 flex items-end justify-center z-10">
             <svg width="200" height="250" viewBox="0 0 200 300" className="drop-shadow-lg">
               <defs>
                 <filter id="puppet-shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -312,7 +391,7 @@ export function SutradharGame() {
             </svg>
           </div>
           
-          <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" aria-hidden="true">
+          <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-20" aria-hidden="true">
             {lineCoords.sort((a,b) => a.isAction ? 1 : -1).map(lc => (
               <line
                 key={lc.id}
