@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
@@ -193,10 +194,12 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId)!;
     const actionStringId = show.script[currentMove].actionString;
     
-    // Check for tangles based on priority
-    // To pull a string, no string with a higher priority can be to its right.
+    const showScriptStringIds = new Set(show.script.map(cmd => cmd.actionString));
+
+    const relevantStrings = strings.filter(s => showScriptStringIds.has(s.id));
+    
     const pulledStringSlotIndex = pulledString.slotIndex;
-    const higherPriorityBlockers = strings.filter(s => 
+    const higherPriorityBlockers = relevantStrings.filter(s => 
         s.slotIndex > pulledStringSlotIndex && s.priority > pulledString.priority
     );
 
@@ -436,5 +439,7 @@ export function SutradharGame() {
     </div>
   );
 }
+
+    
 
     
