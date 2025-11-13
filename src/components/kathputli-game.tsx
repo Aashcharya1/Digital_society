@@ -191,25 +191,25 @@ export function SutradharGame() {
   
   const handlePull = (pulledStringId: PuppetPart) => {
     if (gameStatus !== 'playing') return;
-  
+
     const command = show.script[currentMove];
     if (pulledStringId !== command.actionString) {
-      setGameStatus('lost-wrong');
-      return;
+        setGameStatus('lost-wrong');
+        return;
     }
-  
+
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
-  
-    // Rule: A string is tangled if another string with a higher priority 
-    // is located in a slot to its right.
+    
     const pulledStringSlotIndex = pulledString.slotIndex;
+    
     const stringsToTheRight = strings.filter(s => s.slotIndex > pulledStringSlotIndex);
+    
     const isTangled = stringsToTheRight.some(s => s.priority > pulledString.priority);
   
     if (isTangled) {
-      setGameStatus('lost-tangled');
-      return;
+        setGameStatus('lost-tangled');
+        return;
     }
     
     // Success
@@ -217,9 +217,9 @@ export function SutradharGame() {
     setTimeout(() => setActiveAnimation(null), 700);
   
     if (currentMove < show.script.length - 1) {
-      setCurrentMove(prev => prev + 1);
+        setCurrentMove(prev => prev + 1);
     } else {
-      setGameStatus('won');
+        setGameStatus('won');
     }
   };
 
@@ -443,4 +443,3 @@ export function SutradharGame() {
     
 
     
-
