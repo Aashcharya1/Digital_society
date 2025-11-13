@@ -17,7 +17,6 @@ import {
 import { cn } from '@/lib/utils';
 import type { StringState, GameStatus, LineCoordinate, PuppetPart, Show, Command } from '@/lib/definitions';
 import { STRINGS, SHOW_SCRIPTS } from '@/lib/constants';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 // Helper function to shuffle an array
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -42,20 +41,55 @@ const PuppetIcon = ({ part }: { part: PuppetPart }) => {
 };
 
 const HaveliBackground = () => {
-    const bgImage = PlaceHolderImages.find(p => p.id === 'haveli-background');
-    if (!bgImage) return null;
-
     return (
         <div className="absolute inset-0 overflow-hidden bg-background z-0">
-             <Image
-                src={bgImage.imageUrl}
-                alt={bgImage.description}
-                fill
-                className="object-cover"
-                data-ai-hint={bgImage.imageHint}
-                priority
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+            <div className="absolute inset-0 bg-terracotta-wall">
+                {/* Decorative Arch */}
+                <div className="absolute inset-x-0 top-0 h-full max-w-lg mx-auto">
+                    <div className="relative w-full h-full">
+                        <svg className="absolute w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <path d="M 10 90 Q 50 -20 90 90 L 90 100 L 10 100 Z" fill="rgba(0,0,0,0.05)" />
+                        </svg>
+                    </div>
+                </div>
+
+                {/* Faint motifs */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-[url('data:image/svg+xml,<svg_xmlns=%27http://www.w3.org/2000/svg%27_viewBox=%270_0_100_100%27><path_d=%27M_50_0_C_77.6_0_100_22.4_100_50_S_77.6_100_50_100_0_77.6_0_50_S_22.4_0_50_0_Z_M_50_10_A_40_40_0_1_0_50_90_A_40_40_0_1_0_50_10_Z%27_fill=%27hsl(var(--foreground))%27_opacity=%270.2%27/></svg>')] bg-repeat bg-center" style={{backgroundSize: '80px'}}></div>
+                </div>
+            </div>
+             <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+            {/* Bottom elements */}
+            <div className="absolute bottom-0 left-0 right-0 h-[10%] flex items-end">
+                <div className="w-full h-full bg-checkered-marble" />
+                <div className="absolute -left-10 bottom-0 w-48 h-24 bg-red-800 rounded-t-full transform -skew-x-12 opacity-80" />
+                <div className="absolute -right-10 bottom-0 w-48 h-24 bg-green-800 rounded-t-full transform skew-x-12 opacity-80" />
+                <div className="absolute right-4 bottom-2 text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 18a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"/><path d="M12 2a4 4 0 0 0-4 4v2C8 9.1 8.9 10 10 10h4c1.1 0 2-.9 2-2V6a4 4 0 0 0-4-4Z"/><path d="M12 10v8"/><path d="M8 18h8"/></svg>
+                </div>
+            </div>
+
+             <style jsx>{`
+                .bg-terracotta-wall {
+                    background-color: #E6A27C; /* Ochre-yellow */
+                    background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                                      linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+                                      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+                                      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+                    background-size: 40px 40px;
+                }
+                .bg-checkered-marble {
+                    background-image:
+                        linear-gradient(45deg, #d3d3d3 25%, transparent 25%), 
+                        linear-gradient(-45deg, #d3d3d3 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #d3d3d3 75%),
+                        linear-gradient(-45deg, transparent 75%, #d3d3d3 75%);
+                    background-size: 20px 20px;
+                    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+                    background-color: #f5f5f5;
+                }
+            `}</style>
         </div>
     )
 };
@@ -396,5 +430,3 @@ export function SutradharGame() {
     </div>
   );
 }
-
-    

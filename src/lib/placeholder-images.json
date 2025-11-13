@@ -1,10 +1,3 @@
 {
-  "placeholderImages": [
-    {
-      "id": "haveli-background",
-      "description": "An ornate golden jharokha, a type of overhanging enclosed balcony typical of Indian palaces, set against a dark, textured wall, evoking a sense of royal ambiance.",
-      "imageUrl": "https://images.unsplash.com/photo-1674279967369-8dacf24d9b69?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxnb2xkZW4lMjBqaGFyb2toYXxlbnwwfHx8fDE3NjMwMDA0MzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "golden jharokha"
-    }
-  ]
+  "placeholderImages": []
 }
