@@ -197,17 +197,18 @@ export function SutradharGame() {
       return;
     }
 
-    const pulledString = strings.find(s => s.id === pulledStringId)!;
-    const pulledStringSlotIndex = pulledString.slotIndex;
+    const pulledString = strings.find(s => s.id === pulledStringId);
+    if (!pulledString) return;
 
-    const stringsToTheRight = strings.filter(s => s.slotIndex > pulledStringSlotIndex);
-    const isTangled = stringsToTheRight.some(s => s.priority > pulledString.priority);
+    const pulledStringIndex = strings.findIndex(s => s.id === pulledStringId);
 
-    if (isTangled) {
-      setGameStatus('lost-tangled');
-      return;
+    for (let i = pulledStringIndex + 1; i < strings.length; i++) {
+        if (strings[i].priority > pulledString.priority) {
+            setGameStatus('lost-tangled');
+            return;
+        }
     }
-
+    
     // Success
     const command = show.script[currentMove];
     setActiveAnimation(command);
