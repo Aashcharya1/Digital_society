@@ -414,7 +414,7 @@ export function SutradharGame() {
         </CardContent>
       </Card>
       
-      <p className="text-center text-sm text-muted-foreground mt-4 px-4">
+      <p className="text-center text-sm text-muted-foreground mt-4 px-4" style={{ textShadow: '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff' }}>
         Goal: Perform the show by pulling the correct strings. To pull a string, no string with a higher priority can be to its right. Drag anchors to untangle them.
       </p>
 
