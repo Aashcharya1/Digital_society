@@ -43,52 +43,63 @@ const PuppetIcon = ({ part }: { part: PuppetPart }) => {
 const HaveliBackground = () => {
     return (
         <div className="absolute inset-0 overflow-hidden bg-background z-0">
-            <div className="absolute inset-0 bg-terracotta-wall">
+            <div className="absolute inset-0 bg-rajasthani-wall">
                 {/* Decorative Arch */}
                 <div className="absolute inset-x-0 top-0 h-full max-w-lg mx-auto">
                     <div className="relative w-full h-full">
                         <svg className="absolute w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                            <path d="M 10 90 Q 50 -20 90 90 L 90 100 L 10 100 Z" fill="rgba(0,0,0,0.05)" />
+                            <path d="M 10 90 C 20 20, 30 -10, 50 5 S 70 -10, 80 20, 90 90, 90 90" fill="rgba(0,0,0,0.08)" />
                         </svg>
                     </div>
                 </div>
 
                 {/* Faint motifs */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-[url('data:image/svg+xml,<svg_xmlns=%27http://www.w3.org/2000/svg%27_viewBox=%270_0_100_100%27><path_d=%27M_50_0_C_77.6_0_100_22.4_100_50_S_77.6_100_50_100_0_77.6_0_50_S_22.4_0_50_0_Z_M_50_10_A_40_40_0_1_0_50_90_A_40_40_0_1_0_50_10_Z%27_fill=%27hsl(var(--foreground))%27_opacity=%270.2%27/></svg>')] bg-repeat bg-center" style={{backgroundSize: '80px'}}></div>
+                 <div className="absolute inset-0 opacity-10">
+                    <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%27100%27%20height=%27100%27%20viewBox=%270%200%20100%20100%27%3E%3Cg%20fill=%27%23333%27%20opacity=%270.2%27%3E%3Cpath%20d=%27M50%200C22.4%200%200%2022.4%200%2050s22.4%2050%2050%2050%2050-22.4%2050-50S77.6%200%2050%200zm0%2010c22.1%200%2040%2017.9%2040%2040s-17.9%2040-40%2040S10%2072.1%2010%2050%2027.9%2010%2050%2010z%27/%3E%3Cpath%20d=%27M50%2020c16.5%200%2030%2013.5%2030%2030s-13.5%2030-30%2030-30-13.5-30-30%2013.5-30%2030-30z%27/%3E%3C/g%3E%3C/svg%3E')] bg-repeat bg-center" style={{backgroundSize: '100px'}}></div>
                 </div>
             </div>
-             <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+             <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+            {/* Jali Screen */}
+            <div className="absolute top-0 left-0 right-0 h-1/5 bg-[radial-gradient(ellipse_at_top,_#00000030_0%,_transparent_60%)] opacity-50">
+                 <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2760%27%20height=%2760%27%20viewBox=%270%200%2060%2060%27%20xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cg%20fill=%27none%27%20fill-rule=%27evenodd%27%3E%3Cg%20fill=%27%23d3a17d%27%20fill-opacity=%270.3%27%3E%3Cpath%20d=%27M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0H4v4H0v2h4v4h2V6h4V4H6z%27/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+            </div>
 
             {/* Bottom elements */}
-            <div className="absolute bottom-0 left-0 right-0 h-[10%] flex items-end">
-                <div className="w-full h-full bg-checkered-marble" />
-                <div className="absolute -left-10 bottom-0 w-48 h-24 bg-red-800 rounded-t-full transform -skew-x-12 opacity-80" />
-                <div className="absolute -right-10 bottom-0 w-48 h-24 bg-green-800 rounded-t-full transform skew-x-12 opacity-80" />
-                <div className="absolute right-4 bottom-2 text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 18a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"/><path d="M12 2a4 4 0 0 0-4 4v2C8 9.1 8.9 10 10 10h4c1.1 0 2-.9 2-2V6a4 4 0 0 0-4-4Z"/><path d="M12 10v8"/><path d="M8 18h8"/></svg>
+            <div className="absolute bottom-0 left-0 right-0 h-[12%] flex items-end">
+                <div className="w-full h-full bg-marble-floor" />
+                {/* Cushions */}
+                <div className="absolute -left-12 bottom-0 w-56 h-28 bg-deep-red rounded-t-full transform -skew-x-12 opacity-90 shadow-lg" />
+                <div className="absolute -right-12 bottom-0 w-56 h-28 bg-emerald-green rounded-t-full transform skew-x-12 opacity-90 shadow-lg" />
+                {/* Diya Lamp */}
+                <div className="absolute right-6 bottom-4 text-amber-400 drop-shadow-[0_0_8px_rgba(255,191,0,0.8)]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 4C13.5 4 12 5.5 12 7.5S13.5 11 16 11s4-1.5 4-3.5S18.5 4 16 4z" fill="orange" />
+                        <path d="M21.5 13.5C21.5 13.5 18 16 16 16s-5.5-2.5-5.5-2.5C6 14 3 17 3 19.5c0 1.5 1 2.5 2.5 2.5h13c1.5 0 2.5-1 2.5-2.5C21 17 18 14 21.5 13.5z" />
+                    </svg>
                 </div>
             </div>
 
              <style jsx>{`
-                .bg-terracotta-wall {
-                    background-color: #E6A27C; /* Ochre-yellow */
-                    background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
-                                      linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
-                                      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
-                                      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
-                    background-size: 40px 40px;
+                .bg-rajasthani-wall {
+                    background-color: #d3a17d; /* Sandstone */
+                    background-image: linear-gradient(315deg, #c38e6d 25%, transparent 25%), 
+                                      linear-gradient(45deg, #c38e6d 25%, transparent 25%),
+                                      linear-gradient(315deg, transparent 75%, #c38e6d 75%),
+                                      linear-gradient(45deg, transparent 75%, #c38e6d 75%);
+                    background-size: 50px 50px;
+                    background-position: 0 0, 25px 25px, 25px 25px, 0 0;
                 }
-                .bg-checkered-marble {
-                    background-image:
-                        linear-gradient(45deg, #d3d3d3 25%, transparent 25%), 
-                        linear-gradient(-45deg, #d3d3d3 25%, transparent 25%),
-                        linear-gradient(45deg, transparent 75%, #d3d3d3 75%),
-                        linear-gradient(-45deg, transparent 75%, #d3d3d3 75%);
-                    background-size: 20px 20px;
-                    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-                    background-color: #f5f5f5;
+                .bg-marble-floor {
+                    background-color: #f0e6d2; /* Light cream marble */
+                    background-image: 
+                      linear-gradient(45deg, #d1c4a8 25%, transparent 25%, transparent 75%, #d1c4a8 75%, #d1c4a8),
+                      linear-gradient(45deg, #d1c4a8 25%, transparent 25%, transparent 75%, #d1c4a8 75%, #d1c4a8);
+                    background-size: 30px 30px;
+                    background-position: 0 0, 15px 15px;
                 }
+                .bg-deep-red { background-color: #8B0000; }
+                .bg-emerald-green { background-color: #00693E; }
             `}</style>
         </div>
     )
