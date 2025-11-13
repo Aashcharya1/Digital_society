@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
@@ -200,12 +201,12 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
   
-    const pulledStringSlotIndex = pulledString.slotIndex;
-  
     // Rule: A string is tangled if another string with a higher priority 
     // is located in a slot to its right.
     for (const otherString of strings) {
-      if (otherString.slotIndex > pulledStringSlotIndex) {
+      if (otherString.id === pulledString.id) continue;
+
+      if (otherString.slotIndex > pulledString.slotIndex) {
         if (otherString.priority > pulledString.priority) {
           setGameStatus('lost-tangled');
           return;
