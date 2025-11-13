@@ -109,19 +109,21 @@ export function SutradharGame() {
 
     const pulledString = strings.find(s => s.id === pulledStringId)!;
     const actionStringId = show.script[currentMove].actionString;
-
+    
     // Check for tangles based on priority
+    // To pull a string, no string with a higher priority can be to its right.
+    const pulledStringSlotIndex = pulledString.slotIndex;
     const higherPriorityBlockers = strings.filter(s => 
-      s.priority > pulledString.priority && s.slotIndex > pulledString.slotIndex
+        s.slotIndex > pulledStringSlotIndex && s.priority > pulledString.priority
     );
-
-    if (higherPriorityBlockers.length > 0) {
-      setGameStatus('lost-tangled');
-      return;
-    }
 
     if (pulledStringId !== actionStringId) {
       setGameStatus('lost-wrong');
+      return;
+    }
+
+    if (higherPriorityBlockers.length > 0) {
+      setGameStatus('lost-tangled');
       return;
     }
 
