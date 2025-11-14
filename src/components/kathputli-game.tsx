@@ -177,31 +177,12 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
 
-    // This is the rule: A string is tangled if another string with a higher priority
-    // is located in a slot to its right.
+    // A string is tangled if another string with a higher priority is in a slot to its right.
     const isTangled = strings.some(otherString => {
-        // Don't compare a string to itself
         if (otherString.id === pulledString.id) {
             return false;
         }
-
-        // Check if the other string is to the right
-        const isToTheRight = otherString.slotIndex > pulledString.slotIndex;
-
-        // Check for priority conflict
-        let hasPriorityConflict = false;
-        if (pulledString.priority === otherString.priority) {
-            // If priorities are equal, it's a conflict only if it's the 'left' part
-            // and the 'right' part of the same pair is to its right.
-            if (pulledString.id.includes('Left') && otherString.id.includes('Right')) {
-                hasPriorityConflict = true;
-            }
-        } else if (otherString.priority > pulledString.priority) {
-            // Standard case: a higher priority string is blocking.
-            hasPriorityConflict = true;
-        }
-        
-        return isToTheRight && hasPriorityConflict;
+        return otherString.slotIndex > pulledString.slotIndex && otherString.priority > pulledString.priority;
     });
   
     if (isTangled) {
@@ -413,7 +394,7 @@ export function SutradharGame() {
       </Card>
       
       <div className="bg-white/80 backdrop-blur-sm p-3 rounded-md mt-4 mx-4 shadow-md">
-        <p className="text-center text-sm text-foreground">
+        <p className="text-center text-sm text-foreground" style={{ textShadow: '0 0 5px white, 0 0 10px white, 0 0 15px white' }}>
           Goal: Perform the show by pulling the correct strings. To pull a string, no string with a higher priority can be to its right. Drag anchors to untangle them.
         </p>
       </div>
@@ -434,5 +415,3 @@ export function SutradharGame() {
     </div>
   );
 }
-
-    
