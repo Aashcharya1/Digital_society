@@ -1,5 +1,5 @@
 # The Kathputli Master: A Digital Reclamation of Rajasthan's Forgotten Heritage
-
+https://kathputlimaster-digitalsociety.vercel.app/
 ## Rediscovering the Sutradhar's Art in the Age of Tourism
 
 Rajasthan, the "Land of Kings," stands as one of India's most celebrated cultural destinations. Its magnificent forts, opulent palaces, vibrant festivals, and rich traditions draw millions of tourists from across the globe each year. Yet, in the shadow of these grand monuments and bustling markets, a quieter, more intimate art form has been gradually fading from public consciousness: the Kathputli, Rajasthan's traditional string puppetry, and the masterful skill of the Sutradhar—the puppeteer who brings these wooden figures to life.
@@ -70,6 +70,8 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to experience the game.
+
+To run on web go to - https://kathputlimaster-digitalsociety.vercel.app/
 
 ---
 
