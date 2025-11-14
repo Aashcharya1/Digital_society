@@ -117,30 +117,8 @@ export function SutradharGame() {
     setShow(randomShow);
     setCurrentMove(0);
     
-    let initialStrings = shuffleArray(STRINGS).map((s, i) => ({ ...s, slotIndex: i }));
-
-    // Ensure the game starts in a tangled state for the second move if possible
-    if (randomShow.script.length > 1) {
-      const firstAction = randomShow.script[0];
-      const secondAction = randomShow.script[1];
-      const secondActionString = initialStrings.find(s => s.id === secondAction.actionString)!;
-      const higherPriorityStrings = initialStrings.filter(s => s.priority > secondActionString.priority);
-      
-      const isTangledForSecondMove = higherPriorityStrings.some(s => s.slotIndex > secondActionString.slotIndex);
-      
-      if (!isTangledForSecondMove && higherPriorityStrings.length > 0) {
-          const stringToTangle = higherPriorityStrings[0];
-          const tangleTargetSlotIndex = initialStrings.length - 1;
-
-          if (secondActionString.slotIndex < tangleTargetSlotIndex) {
-              const stringAtTarget = initialStrings.find(s => s.slotIndex === tangleTargetSlotIndex)!;
-              
-              const tangledStringOldIndex = stringToTangle.slotIndex;
-              stringToTangle.slotIndex = tangleTargetSlotIndex;
-              stringAtTarget.slotIndex = tangledStringOldIndex;
-          }
-      }
-    }
+    // Simple shuffle for a random but fair start
+    const initialStrings = shuffleArray(STRINGS).map((s, i) => ({ ...s, slotIndex: i }));
 
     setStrings(initialStrings.sort((a, b) => a.slotIndex - b.slotIndex));
     setGameStatus('playing');
@@ -199,15 +177,11 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
 
-    // A string is tangled if any string to its right has a higher priority.
-    const isTangled = strings.some(otherString => {
-        if (otherString.id === pulledString.id) {
-            return false; // Don't compare a string to itself
-        }
-        const isToTheRight = otherString.slotIndex > pulledString.slotIndex;
-        const hasHigherPriority = otherString.priority > pulledString.priority;
-        return isToTheRight && hasHigherPriority;
-    });
+    // A string is tangled if any string with a higher priority is visually to its right.
+    const isTangled = strings.some(otherString => 
+        otherString.slotIndex > pulledString.slotIndex && 
+        otherString.priority > pulledString.priority
+    );
 
     if (isTangled) {
         setGameStatus('lost-tangled');
