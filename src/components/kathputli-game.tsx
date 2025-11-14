@@ -32,9 +32,9 @@ const PuppetIcon = ({ part }: { part: PuppetPart }) => {
   const className = "size-5 text-primary-foreground";
   switch (part) {
     case 'Head': return <User className={className} />;
-    case 'Left Hand':
+    case 'Left Hand':return <Hand className={className} />;
     case 'Right Hand': return <Hand className={className} />;
-    case 'Left Foot':
+    case 'Left Foot':return <Footprints className={className} />;
     case 'Right Foot': return <Footprints className={className} />;
     default: return null;
   }
@@ -82,7 +82,7 @@ const HaveliBackground = () => {
                     background-color: #FDF5E6; /* Old Lace - a soft, aged plaster color */
                     background-image:
                         /* Small floral block print */
-                        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd' fill='%23d3a17d' fill-opacity='0.4'%3E%3Cpath d='M20 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-8 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm16 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM20 28c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z'/%3E%3Cpath d='M20 0a20 20 0 100 40 20 20 0 000-40zM3.5 20a16.5 16.5 0 1133 0 16.5 16.5 0 01-33 0z'/%3E%3C/g%3E%3C/svg%3E");
+                        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd' fill='%23d3a17d' fill-opacity='0.4'%3E%3Cpath d='M20 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2-2zm0-10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2-2zm-8 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2-2zm16 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2-2zM20 28c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2-2z'/%3E%3Cpath d='M20 0a20 20 0 100 40 20 20 0 000-40zM3.5 20a16.5 16.5 0 1133 0 16.5 16.5 0 01-33 0z'/%3E%3C/g%3E%3C/svg%3E");
                     background-size: 20px 20px;
                 }
                 .bg-marble-floor {
@@ -167,35 +167,56 @@ export function SutradharGame() {
   
   const handlePull = (pulledStringId: PuppetPart) => {
     if (gameStatus !== 'playing') return;
-
+  
     const command = show.script[currentMove];
     if (pulledStringId !== command.actionString) {
-        setGameStatus('lost-wrong');
-        return;
+      setGameStatus('lost-wrong');
+      return;
     }
-
+  
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
 
-    // A string is tangled if any string with a higher priority is visually to its right.
-    const isTangled = strings.some(otherString => 
-        otherString.slotIndex > pulledString.slotIndex && 
-        otherString.priority > pulledString.priority
-    );
+    // This is the rule: A string is tangled if another string with a higher priority
+    // is located in a slot to its right.
+    const isTangled = strings.some(otherString => {
+        // Don't compare a string to itself
+        if (otherString.id === pulledString.id) {
+            return false;
+        }
 
+        // Check if the other string is to the right
+        const isToTheRight = otherString.slotIndex > pulledString.slotIndex;
+
+        // Check for priority conflict
+        let hasPriorityConflict = false;
+        if (pulledString.priority === otherString.priority) {
+            // If priorities are equal, it's a conflict only if it's the 'left' part
+            // and the 'right' part of the same pair is to its right.
+            if (pulledString.id.includes('Left') && otherString.id.includes('Right')) {
+                hasPriorityConflict = true;
+            }
+        } else if (otherString.priority > pulledString.priority) {
+            // Standard case: a higher priority string is blocking.
+            hasPriorityConflict = true;
+        }
+        
+        return isToTheRight && hasPriorityConflict;
+    });
+  
     if (isTangled) {
-        setGameStatus('lost-tangled');
-        return;
+      setGameStatus('lost-tangled');
+      return;
     }
-    
+  
     // Success
     setActiveAnimation(command);
     setTimeout(() => setActiveAnimation(null), 700);
   
     if (currentMove < show.script.length - 1) {
-        setCurrentMove(prev => prev + 1);
+      setCurrentMove(prev => prev + 1);
     } else {
-        setGameStatus('won');
+      setGameStatus('won');
     }
   };
 
@@ -413,3 +434,5 @@ export function SutradharGame() {
     </div>
   );
 }
+
+    
