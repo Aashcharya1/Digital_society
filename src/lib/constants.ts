@@ -4,13 +4,21 @@ export const PUPPET_PARTS: PuppetPart[] = ['Head', 'Left Hand', 'Right Hand', 'L
 
 export const STRINGS: StringDefinition[] = [
   { id: 'Head', name: 'Head', color: 'hsl(var(--destructive))', priority: 6 },
-  { id: 'Left Hand', name: 'L. Hand', color: 'hsl(var(--chart-2))', priority: 4 },
+  { id: 'Left Hand', name: 'L. Hand', color: 'hsl(var(--chart-2))', priority: 5 },
   { id: 'Right Hand', name: 'R. Hand', color: 'hsl(var(--chart-1))', priority: 5 },
-  { id: 'Left Foot', name: 'L. Foot', color: 'hsl(var(--chart-4))', priority: 2 },
+  { id: 'Left Foot', name: 'L. Foot', color: 'hsl(var(--chart-4))', priority: 3 },
   { id: 'Right Foot', name: 'R. Foot', color: 'hsl(var(--chart-5))', priority: 3 },
 ];
 
 export const SLOT_COUNT = 5;
+
+export const PUPPET_ANCHOR_ORDER: Record<PuppetPart, number> = {
+  'Left Hand': 0,
+  'Left Foot': 1,
+  Head: 2,
+  'Right Foot': 3,
+  'Right Hand': 4,
+};
 
 export const SHOW_SCRIPTS: Show[] = [
   {

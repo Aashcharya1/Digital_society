@@ -14,6 +14,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import type { StringState, GameStatus, LineCoordinate, PuppetPart, Show, Command } from '@/lib/definitions';
 import { STRINGS, SHOW_SCRIPTS } from '@/lib/constants';
@@ -98,12 +106,32 @@ const HaveliBackground = () => {
     )
 };
 
+const linesIntersect = (lineA: LineCoordinate, lineB: LineCoordinate) => {
+  const ccw = (
+    ax: number,
+    ay: number,
+    bx: number,
+    by: number,
+    cx: number,
+    cy: number
+  ) => (cy - ay) * (bx - ax) > (by - ay) * (cx - ax);
+
+  const intersects =
+    ccw(lineA.x1, lineA.y1, lineB.x1, lineB.y1, lineB.x2, lineB.y2) !==
+      ccw(lineA.x2, lineA.y2, lineB.x1, lineB.y1, lineB.x2, lineB.y2) &&
+    ccw(lineA.x1, lineA.y1, lineA.x2, lineA.y2, lineB.x1, lineB.y1) !==
+      ccw(lineA.x1, lineA.y1, lineA.x2, lineA.y2, lineB.x2, lineB.y2);
+
+  return intersects;
+};
+
 export function SutradharGame() {
   const [strings, setStrings] = useState<StringState[]>([]);
   const [gameStatus, setGameStatus] = useState<GameStatus>('playing');
   const [activeAnimation, setActiveAnimation] = useState<Command | null>(null);
   const [lineCoords, setLineCoords] = useState<LineCoordinate[]>([]);
   const [draggedStringId, setDraggedStringId] = useState<PuppetPart | null>(null);
+  const [showCultureEssay, setShowCultureEssay] = useState(false);
   
   const [show, setShow] = useState<Show>({ id: '', name: '', script: [] });
   const [currentMove, setCurrentMove] = useState(0);
@@ -128,6 +156,14 @@ export function SutradharGame() {
   useEffect(() => {
     resetGame();
   }, [resetGame]);
+
+  useEffect(() => {
+    setShowCultureEssay(true);
+  }, []);
+
+  const handleStartGame = () => {
+    setShowCultureEssay(false);
+  };
 
   const updateLineCoordinates = useCallback(() => {
     if (!gameAreaRef.current) return;
@@ -177,11 +213,14 @@ export function SutradharGame() {
     const pulledString = strings.find(s => s.id === pulledStringId);
     if (!pulledString) return;
   
-    // A string is tangled if another string with a higher priority is in a slot to its right.
-    const isTangled = strings.some(otherString => 
-      otherString.slotIndex > pulledString.slotIndex && 
-      otherString.priority > pulledString.priority
-    );
+    // A string is tangled if another string's line visually crosses it.
+    const pulledLine = lineCoords.find(line => line.id === pulledStringId);
+    const isTangled = !pulledLine
+      ? true
+      : lineCoords.some(
+          line =>
+            line.id !== pulledStringId && linesIntersect(pulledLine, line)
+        );
   
     if (isTangled) {
       setGameStatus('lost-tangled');
@@ -242,7 +281,7 @@ export function SutradharGame() {
       case 'lost-tangled':
         return {
           title: "Tangled!",
-          description: "The strings are crossed! A higher priority string is blocking the way. A true Sutradhar keeps their lines clear at all times."
+          description: "The strings are crossed! Another line is still in front of this move. A true Sutradhar keeps every path clear before pulling."
         };
       case 'lost-wrong':
         return {
@@ -275,20 +314,22 @@ export function SutradharGame() {
   return (
     <div className="w-full max-w-2xl mx-auto font-body">
       <header className="text-center mb-4">
-        <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary" style={{ textShadow: '0 0 5px white, 0 0 10px white, 0 0 15px white' }}>The Sutradhar's Show</h1>
-        <div className="text-muted-foreground mt-3 text-base sm:text-lg flex justify-center items-center gap-2 flex-wrap">
-          {show.script.map((command, index) => (
-             <React.Fragment key={command.id + index}>
-              <span className={cn(
-                "px-2 py-1 rounded",
-                {'font-bold text-foreground bg-primary/20': index === currentMove},
-                {'opacity-60': index < currentMove},
-              )} style={{ textShadow: '0 0 2px white' }}>
-                {getCommandDisplayName(command)}
-              </span>
-              {index < show.script.length - 1 && <ChevronsRight className="size-5 opacity-50 shrink-0" />}
-            </React.Fragment>
-          ))}
+        <div className="inline-block w-full max-w-3xl mx-auto bg-white/90 backdrop-blur rounded-xl shadow-lg px-4 py-3 border border-white/60">
+          <h1 className="text-4xl sm:text-5xl font-headline font-bold text-primary" style={{ textShadow: '0 0 5px white, 0 0 10px white, 0 0 15px white' }}>The Sutradhar's Show</h1>
+          <div className="text-muted-foreground mt-3 text-base sm:text-lg flex justify-center items-center gap-2 flex-wrap">
+            {show.script.map((command, index) => (
+              <React.Fragment key={command.id + index}>
+                <span className={cn(
+                  "px-2 py-1 rounded",
+                  {'font-bold text-foreground bg-primary/20': index === currentMove},
+                  {'opacity-60': index < currentMove},
+                )} style={{ textShadow: '0 0 2px white' }}>
+                  {getCommandDisplayName(command)}
+                </span>
+                {index < show.script.length - 1 && <ChevronsRight className="size-5 opacity-50 shrink-0" />}
+              </React.Fragment>
+            ))}
+          </div>
         </div>
       </header>
       
@@ -393,7 +434,7 @@ export function SutradharGame() {
       
       <div className="bg-white/80 backdrop-blur-sm p-3 rounded-md mt-4 mx-4 shadow-md">
         <p className="text-center text-sm text-foreground" style={{ textShadow: '0 0 5px white, 0 0 10px white, 0 0 15px white' }}>
-          Goal: Perform the show by pulling the correct strings. To pull a string, no string with a higher priority can be to its right. Drag anchors to untangle them.
+          Goal: Perform the show by pulling the correct strings. To pull a string, make sure no other line crosses in front of it. Drag anchors to untangle them.
         </p>
       </div>
 
@@ -410,6 +451,41 @@ export function SutradharGame() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={showCultureEssay} onOpenChange={(open) => setShowCultureEssay(open)}>
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto bg-gradient-to-b from-white via-amber-50 to-white shadow-2xl border-2 border-amber-200">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-headline text-primary">Rajasthan, The Sutradhar, and the Kathputli</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-5 text-base sm:text-lg text-stone-700 leading-relaxed font-serif py-4">
+            <p className="text-xl font-semibold text-amber-800 uppercase tracking-wide">1. The Problem: The Tourist Gaze and the "Flat" Artifact</p>
+            <p>Rajasthan, as a global tourism hotspot, exists in a hyper-mediated state. Its culture is a product to be consumed, and its objects are artifacts to be photographed and purchased. The "tourist gaze," as defined by John Urry, is powerful here; it simplifies, flattens, and de-contextualizes. A visitor buys a Kathputli (a traditional marionette) in a Jodhpur market, hangs it on a wall in London or New York, and it becomes a static, "exotic" signifier of "India."</p>
+            <p>This act of de-contextualization is a form of misrepresentation. The Kathputli, separated from its Sutradhar (the puppeteer), is a lifeless object. The tourist who watches a 5-minute show sees a spectacle, a flurry of color and sound. They consume the product of the art but remain completely blind to the practice of it. The Sutradhar—the artist whose skill gives the object life—is rendered invisible, a mere backstage mechanism.</p>
+            <p>My project begins with a central question: How can a digital artifact move beyond this surface-level representation and reveal the under-represented, embodied knowledge of the practitioner?</p>
+            <p className="text-xl font-semibold text-amber-800 uppercase tracking-wide">2. The Intervention: Why a Game?</p>
+            <p>My chosen artifact is a simple web game titled "The Kathputli Master." I rejected other, more passive mediums for a specific reason. A photo essay or a short film would merely tell the audience that the Sutradhar's job is difficult. It would continue the tradition of passive consumption; the audience would still be watching.</p>
+            <p>I turned instead to the concept of procedural rhetoric, as articulated by Ian Bogost. Bogost argues that games make arguments not through words or images, but through their rules, processes, and systems. A game can "persuade by process," forcing a player to internalize a complex system by doing.</p>
+            <p>This is the methodological core of my project. My game is an interactive argument. The argument is: The true, under-represented art of the Kathputli is not the show, but the cognitive and manual labor of string management.</p>
+            <p className="text-xl font-semibold text-amber-800 uppercase tracking-wide">3. The Artifact: "The Kathputli Master" as Argument</p>
+            <p>The game, inspired by the simple, focused interactions on sites like neal.fun, is not a complex simulation. It is a single, focused, rhetorical puzzle.</p>
+            <p className="italic text-amber-900">The "Spectacle" (What the Tourist Sees):</p>
+            <p>The player is given a command: "Make the puppet bow." The obvious action is to pull the "head" string.</p>
+            <p className="italic text-amber-900">The "Under-represented Practice" (What the Game Forces):</p>
+            <p>The game's screen shows the puppet, but its strings are deliberately and randomly tangled. The "head" string is crossed under the "hand" string. If the player simply pulls—the "obvious" action—the strings tangle, and the game is over.</p>
+            <p className="italic text-amber-900">The "Fail State" as Thesis:</p>
+            <p>The fail state—"You are tangled! The show is over."—is the entire argument. It is a moment of productive failure. The player is immediately and viscerally confronted with the Slog of the Sutradhar. Their focus is ripped away from the desired outcome (the bow) and forced onto the complex process (the tangle).</p>
+            <p className="italic text-amber-900">The "Win State" as Embodied Learning:</p>
+            <p>To win, the player must ignore the "show." They must first engage in the "un-seen" labor: clicking and dragging the "hand" string behind the "head" string. Only then can they pull the "head" string to perform the bow. The player is forced to become the Sutradhar—not a performer, but a high-stakes, real-time systems manager.</p>
+            <p>By randomizing the commands ("Bow," "Wave," "Dance") and the tangles with each playthrough, the game moves from a simple "puzzle" (a static problem) to a "simulation" (a dynamic system). This procedural choice argues that the Sutradhar's skill is not a memorized script, but a constant, adaptive mastery over a chaotic and complex physical system.</p>
+            <p className="text-xl font-semibold text-amber-800 uppercase tracking-wide">4. Conclusion: From Passive Gaze to Active Engagement</p>
+            <p>"The Kathputli Master" is a work of digital humanities. It is an attempt to use an interactive medium to restore context and agency to a cultural practice that is consistently misrepresented. It "un-flattens" the Kathputli by digitally re-attaching it to the labor and intellect of its master.</p>
+            <p>Where the tourist gaze sees a dancing puppet, my artifact demands the user see the tangled strings. It shifts the hero of the story from the object (the puppet) to the practitioner (the Sutradhar). By gamifying the labor rather than the spectacle, the game forces the player, however briefly, to abandon the role of passive tourist and engage with the practice itself. This, I argue, is a more honest, more ethical, and more profound form of cultural representation.</p>
+          </div>
+          <DialogFooter className="flex justify-center">
+            <Button onClick={handleStartGame} className="text-lg px-8 py-6 rounded-full font-headline tracking-wide">Begin the Show</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
